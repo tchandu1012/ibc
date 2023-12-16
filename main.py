@@ -3,6 +3,7 @@ import os
 from fastapi import FastAPI, Query, HTTPException
 import requests
 from core.config import settings
+from genFeaturesFromEpic import generate_features
 
 app = FastAPI(title=settings.PROJECT_NAME,version=settings.PROJECT_VERSION)
 app.add_middleware(
@@ -84,3 +85,11 @@ async def display_miro_cards(board_id: str = Query(..., title="Miro Board ID"), 
     except HTTPException as e:
         raise e
 
+@app.get("/generate-features")
+async def call_generate_features(epic_description: str):
+    try:
+        # Call generate_features method here by passing the epic_description
+        generated_features = generate_features(epic_description)
+        return {"generated_features": generated_features}
+    except Exception as e:
+        return {"error": str(e)}
