@@ -42,7 +42,7 @@ def generate_features(epic_description):
     "frequency_penalty": 0,
     "presence_penalty": 0
   })
-    print(f"IN Calling OpenAI ${headers}")
+    #print(f"IN Calling OpenAI ${headers}")
 
   response = requests.request("POST", url, headers=headers, data=payload)
   print(response.text)
@@ -51,6 +51,7 @@ def generate_features(epic_description):
   # Access choices[0] from the response data
   choices_0 = response_data['choices'][0]
   print(choices_0)
+  return choices_0
 
 # card_data ="Create a Mentor-Mentee Initiative"
 # generate_features(card_data)
