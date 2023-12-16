@@ -42,12 +42,9 @@ def generate_features(epic_description):
     "frequency_penalty": 0,
     "presence_penalty": 0
   })
-  headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer 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',
-  }
+  
 
-  response = requests.request("POST", url, headers=headers, data=payload)
+  response = requests.request("POST", url, headers, data=payload)
   print(response.text)
   # Parse the response text to a Python dictionary
   response_data = json.loads(response.text)
