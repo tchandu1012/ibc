@@ -44,7 +44,7 @@ def generate_features(epic_description):
   })
   
 
-  response = requests.request("POST", url, headers, data=payload)
+  response = requests.request("POST", url, headers=headers, data=payload)
   print(response.text)
   # Parse the response text to a Python dictionary
   response_data = json.loads(response.text)
