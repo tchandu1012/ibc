@@ -42,7 +42,8 @@ def generate_features(epic_description):
     "frequency_penalty": 0,
     "presence_penalty": 0
   })
-    #print(f"IN Calling OpenAI ${headers}")
+
+  print(f"IN Calling OpenAI for generate_features ")
 
   response = requests.request("POST", url, headers=headers, data=payload)
   print(response.text)
