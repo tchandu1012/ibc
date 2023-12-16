@@ -1,6 +1,7 @@
 #main.py
 import os
 from fastapi import FastAPI, Query, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import requests
 from core.config import settings
 from genFeaturesFromEpic import generate_features
