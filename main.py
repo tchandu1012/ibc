@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import requests
 from core.config import settings
 from genFeaturesFromEpic import generate_features
+import re
 
 app = FastAPI(title=settings.PROJECT_NAME,version=settings.PROJECT_VERSION)
 app.add_middleware(
@@ -33,16 +34,16 @@ def remove_html_tags(text):
 def hello_api():
     return {"msg":"Hello, This is IBC MIRO Test API Service 🚀"}
 
-def get_item_info(item_id):
-    response = requests.get(f'{MIRO_API_BASE_URL}/boards/{BOARD_ID}/items/{item_id}', headers=headers)
+def get_item_info(board_id,item_id):
+    response = requests.get(f'{MIRO_API_BASE_URL}/boards/{board_id}/items/{item_id}', headers=headers)
     if response.status_code == 200:
         return response.json()
     else:
         print(f"Failed to get frame info. Reason: {response.content.decode('utf-8')}.")
         return None
 
-def get_frame_info(frame_id):
-    response = requests.get(f'{MIRO_API_BASE_URL}/boards/{BOARD_ID}/frames/{frame_id}', headers=headers)
+def get_frame_info(board_id,frame_id):
+    response = requests.get(f'{MIRO_API_BASE_URL}/boards/{board_id}/frames/{frame_id}', headers=headers)
     if response.status_code == 200:
         return response.json()
     else:
