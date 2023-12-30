@@ -6,8 +6,13 @@ import requests
 from core.config import settings
 from genFeaturesFromEpic import generate_features
 import re
+import logging
 
-app = FastAPI(title=settings.PROJECT_NAME,version=settings.PROJECT_VERSION)
+# Create a logger object
+logger = logging.getLogger(__name__)
+logger.info('Starting the application')
+
+app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
