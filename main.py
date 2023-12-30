@@ -32,9 +32,26 @@ def remove_html_tags(text):
     
 @app.get("/")
 def hello_api():
-    return {"msg":"Hello, This is IBC MIRO Test API Service 🚀"}
+    """
+    A function that represents the handler for the root endpoint ("/") of the API.
+
+    Returns:
+        dict: A dictionary containing the message "Hello, This is IBC MIRO REST API Test Service 🚀".
+    """
+    return {"msg":"Hello, This is IBC MIRO REST API Test Service 🚀"}
 
 def get_item_info(board_id,item_id):
+    """
+    Retrieves information about a specific item in a board.
+
+    Args:
+        board_id (str): The ID of the board containing the item.
+        item_id (str): The ID of the item to retrieve information for.
+
+    Returns:
+        dict or None: The JSON response containing the item information if the request is successful,
+        None otherwise.
+    """
     response = requests.get(f'{MIRO_API_BASE_URL}/boards/{board_id}/items/{item_id}', headers=headers)
     if response.status_code == 200:
         return response.json()
@@ -42,7 +59,22 @@ def get_item_info(board_id,item_id):
         print(f"Failed to get frame info. Reason: {response.content.decode('utf-8')}.")
         return None
 
+
 def get_frame_info(board_id,frame_id):
+    """
+    Retrieves information about a specific frame on a Miro board.
+
+    Args:
+        board_id (str): The ID of the Miro board.
+        frame_id (str): The ID of the frame on the Miro board.
+
+    Returns:
+        dict: The JSON response containing the information about the frame.
+
+    Raises:
+        HTTPException: If the request to fetch the Miro frame fails.
+
+    """
     response = requests.get(f'{MIRO_API_BASE_URL}/boards/{board_id}/frames/{frame_id}', headers=headers)
     if response.status_code == 200:
         return response.json()
@@ -52,6 +84,19 @@ def get_frame_info(board_id,frame_id):
 
         
 def get_miro_frames(board_id):
+    """
+    Retrieves the frames from the Miro API for a given board ID.
+
+    Parameters:
+        board_id (str): The ID of the Miro board.
+
+    Returns:
+        dict: A dictionary containing the frames retrieved from the Miro API.
+
+    Raises:
+        HTTPException: If the request to the Miro API fails or returns a non-200 status code.
+    """
+    
     url = f"{MIRO_API_BASE_URL}/boards/{board_id}/frames"
     response = requests.get(url, headers)
 
@@ -62,6 +107,20 @@ def get_miro_frames(board_id):
         raise HTTPException(status_code=response.status_code, detail=error_reason)
 
 def get_miro_cards(board_id, frame_id):
+    """
+    Retrieves the cards from a Miro board frame.
+
+    Parameters:
+        board_id (str): The ID of the Miro board.
+        frame_id (str): The ID of the Miro board frame.
+
+    Returns:
+        dict: A dictionary containing the cards retrieved from the Miro board frame.
+
+    Raises:
+        HTTPException: If the API call to retrieve the cards fails.
+
+    """
     url = f"{MIRO_API_BASE_URL}/boards/{board_id}/frames/{frame_id}/cards"
     response = requests.get(url, headers)
 
@@ -73,6 +132,18 @@ def get_miro_cards(board_id, frame_id):
 
 @app.get("/miro-frames")
 async def display_miro_frames(board_id: str = Query(..., title="Miro Board ID")):
+    """
+    Retrieves the Miro frames associated with a specific board.
+
+    Parameters:
+        board_id (str): The ID of the Miro board.
+
+    Returns:
+        List[Frame]: A list of Miro frames.
+
+    Raises:
+        HTTPException: If there is an error retrieving the Miro frames.
+    """
     try:
         frames = get_miro_frames(board_id)
         return frames
@@ -81,6 +152,19 @@ async def display_miro_frames(board_id: str = Query(..., title="Miro Board ID"))
 
 @app.get("/miro-cards")
 async def display_miro_cards(board_id: str = Query(..., title="Miro Board ID"), frame_id: str = Query(..., title="Miro Frame ID")):
+    """
+    Retrieve and display Miro cards from a specific Miro board and frame.
+
+    Parameters:
+    - board_id (str): The ID of the Miro board.
+    - frame_id (str): The ID of the Miro frame.
+
+    Returns:
+    - cards: The Miro cards retrieved from the specified board and frame.
+
+    Raises:
+    - HTTPException: If there is an error retrieving the Miro cards.
+    """
     try:
         cards = get_miro_cards(board_id, frame_id)
         return cards
@@ -89,6 +173,16 @@ async def display_miro_cards(board_id: str = Query(..., title="Miro Board ID"), 
 
 @app.get("/generate-features")
 async def call_generate_features(epic_description: str):
+    """
+    Call generate_features method by passing the epic_description and return the generated_features.
+    
+    Parameters:
+        - epic_description (str): The description of the epic.
+        
+    Returns:
+        - dict: A dictionary containing the generated features.
+          If an error occurs, it returns a dictionary with the error message.
+    """
     try:
         # Call generate_features method here by passing the epic_description
         generated_features = generate_features(epic_description)
