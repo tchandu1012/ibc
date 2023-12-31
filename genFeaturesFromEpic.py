@@ -94,7 +94,7 @@ def generate_features(epic_description, top_n=5):
   logger.info(f"In Calling OpenAI for generate_features for a Epic Description : {epic_description}")
 
   response = requests.request("POST", url, headers=headers, data=payload)
-  logger.info(f"OpenAI response : {response.text}")
+  logger.info(f"OpenAI response  {response.text}")
   # Parse the response text to a Python dictionary
   response_data = json.loads(response.text)
   # Access choices[0] from the response data
