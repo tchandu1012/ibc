@@ -1,127 +1,36 @@
-# logging.yaml
 version: 1
+disable_existing_loggers: False
+formatters:
+    simple:
+        format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        datefmt: '%Y-%m-%d %H:%M:%S'
+handlers:
+    console:
+        class: rich.logging.RichHandler
+        level: DEBUG
+        formatter: simple
+        rich_tracebacks: true  # enable rich tracebacks in console  file:
+    
+    file:
+        class: logging.FileHandler
+        level: DEBUG
+        formatter: simple
+        filename: myapp.log
+        mode: a
+loggers:
+    development:
+        level: DEBUG
+        handlers: [file, console]
+        propagate: no
+    staging:
+        level: INFO
+        handlers: [console, file]
+        propagate: no
 
-# Define the common settings applicable to all environments
-common_settings:
-  formatters:
-    richFormatter:
-      format: "%(message)s"
-      datefmt: "[%X]"
-      stack_info: true
-
-    accessFormatter:
-      format: "%(asctime)s - %(levelname)s - %(name)s - %(filename)s:%(lineno)d - %(funcName)s - %(message)s - %(exc_info)s"
-      datefmt: "[%X]"
-
-    errorFormatter:
-      format: "%(asctime)s - %(levelname)s - %(name)s - %(filename)s:%(lineno)d - %(funcName)s - %(message)s - %(exc_info)s"
-      datefmt: "[%X]"
-      stack_info: true
-
-  handlers:
-    consoleHandler:
-      class: rich.logging.RichHandler
-      level: "%(LOGLEVEL_CONSOLE)s"
-      formatter: richFormatter
-      args: (sys.stdout,)
-
-    rotatingFileHandler:
-      class: logging.handlers.RotatingFileHandler
-      level: "%(LOGLEVEL_FILE)s"
-      formatter: richFormatter
-      args: ("%(name)s.log", "a", 10*1024*1024, 5)
-
-    accessHandler:
-      class: logging.FileHandler
-      level: "%(LOGLEVEL_ACCESS)s"
-      formatter: accessFormatter
-      args: ("access.log",)
-
-    errorHandler:
-      class: logging.FileHandler
-      level: "%(LOGLEVEL_ERROR)s"
-      formatter: errorFormatter
-      args: ("error.log",)
-
-    httpHandler:
-      class: logging.handlers.HTTPHandler
-      level: "%(LOGLEVEL_HTTP)s"
-      formatter: accessFormatter
-      args: ("example.com", "/log", "POST", ("user", "password"))
-
-    smtpHandler:
-      class: logging.handlers.SMTPHandler
-      level: "%(LOGLEVEL_SMTP)s"
-      formatter: errorFormatter
-      args: ("mail.example.com", "noreply@example.com", ["admin@example.com"], "Log message", ("user", "password"), ())
-
-    socketHandler:
-      class: logging.handlers.SocketHandler
-      level: "%(LOGLEVEL_SOCKET)s"
-      formatter: richFormatter
-      args: ("example.com", 9999)
-
-    csvHandler:
-      class: logging.handlers.CSVHandler
-      level: "%(LOGLEVEL_CSV)s"
-      formatter: accessFormatter
-      args: ("log.csv", "a", "utf-8", ["time", "level", "name", "message"])
-
-    jsonHandler:
-      class: logging.handlers.JSONHandler
-      level: "%(LOGLEVEL_JSON)s"
-      formatter: accessFormatter
-      args: ("log.json", "a", "utf-8", 4)
-
-    sqlHandler:
-      class: logging.handlers.SQLHandler
-      level: "%(LOGLEVEL_SQL)s"
-      formatter: accessFormatter
-      args: # Start a new line for the nested mapping
-        - "sqlite:///log.db" # Use a dash for each element of the sequence
-        - "log"
-        - time: "asctime" # Use a colon for each element of the mapping
-          level: "levelname"
-          name: "name"
-          message: "message"
-
-  loggers:
-    root:
-      level: "%(ENV)s"
-      handlers: [consoleHandler, rotatingFileHandler]
-      common_settings: # Indent this line
-        formatters: # And the following lines
-          richFormatter:
-            format: "%(message)s"
-            datefmt: "[%X]"
-            stack_info: true
-          # And so on
-
-# Define the environment-specific settings
-development:
-  <<: *common_settings # Merge the common settings with the environment-specific settings
-  LOGLEVEL_CONSOLE: DEBUG
-  LOGLEVEL_FILE: DEBUG
-  LOGLEVEL_ACCESS: DEBUG
-  LOGLEVEL_ERROR: DEBUG
-  LOGLEVEL_HTTP: DEBUG
-  LOGLEVEL_SMTP: DEBUG
-  LOGLEVEL_SOCKET: DEBUG
-  LOGLEVEL_CSV: DEBUG
-  LOGLEVEL_JSON: DEBUG
-  LOGLEVEL_SQL: DEBUG
-
-production:
-  <<: *common_settings # Merge the common settings with the environment-specific settings
-  LOGLEVEL_CONSOLE: INFO
-  LOGLEVEL_FILE: INFO
-  LOGLEVEL_ACCESS: INFO
-  LOGLEVEL_ERROR: INFO
-  LOGLEVEL_HTTP: INFO
-  LOGLEVEL_SMTP: INFO
-  LOGLEVEL_SOCKET: INFO
-  LOGLEVEL_CSV: INFO
-  LOGLEVEL_JSON: INFO
-  LOGLEVEL_SQL: INFO
-
-# Add more environments and their respective settings as needed
+    production:
+        level: WARNING
+        handlers: [file]
+        propagate: no
+root:
+    level: DEBUG
+    handlers: [console]
