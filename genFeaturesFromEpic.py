@@ -12,6 +12,47 @@ headers = {
 
 
 def generate_features(epic_description):
+  """
+  Generates top five features based on the given epic description.
+
+  Parameters:
+  - epic_description (str): The description of the epic.
+
+  Returns:
+  - dict: A dictionary containing the generated features in a JSON array format.
+
+  Description:
+  This function takes an epic description as input and generates the top five features that satisfy the given epic description. The features are generated in a syntactically correct JSONArray format. The function reviews all generated features thoroughly and provides detailed hypothesis, acceptance criteria, leading indicators, non-functional requirements (NFRs), and objectives and key results (OKRs) for each feature. The function also estimates the business value, time criticality, and RR/OE (Risk Reduction/Operational Efficiency) for each feature using Fibonacci numbers. At least one feature will have a business value of 1. The function provides a detailed explanation and reasoning for each estimation. The output is returned in a JSON array format.
+
+  Sample JSONArray Output:
+  {  
+    "ArraySize": 2,
+    "Features": [
+      {
+        "feature": {
+          "Title": "Sample Title",
+          "Hypothesis": "Sample",
+          "Acceptance Criteria": "[Given] Sample [When] sample [Then] sample",
+          "Leading Indicators": "Sample",
+          "Non-functional Requirements": "Sample",
+          "Business Value": {
+            "value": 8,
+            "rationale": "Sample"
+          },
+          "Time Criticality": {
+            "value": 8,
+            "rationale": "Sample."
+          },
+          "RR/OE": {
+            "value": 3,
+            "rationale": "Sample."
+          }
+        }
+      },
+      // Include similar structures for the remaining features...
+    ]
+  }
+  """  
   url = OPENAI_URL
 
   payload = json.dumps({
@@ -43,7 +84,7 @@ def generate_features(epic_description):
     "presence_penalty": 0
   })
 
-  print(f"IN Calling OpenAI for generate_features ")
+  print(f"In Calling OpenAI for generate_features ")
 
   response = requests.request("POST", url, headers=headers, data=payload)
   print(response.text)
